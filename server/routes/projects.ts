@@ -1,12 +1,12 @@
 import { RequestHandler } from "express";
-import { Project } from "../models/Project";
 import { AuthRequest } from "../middleware/auth";
+import { db } from "../db/local-db";
 
 export const listProjects: RequestHandler = async (req: AuthRequest, res) => {
   try {
     const userId = req.userId!;
-    const projects = await Project.find({ user: userId }).sort({ createdAt: -1 });
-    return res.json({ projects });
+    const projects = await db.listProjectsByUser(userId);
+    return res.json({ projects: projects.map((p) => ({ _id: p.id, title: p.title, description: p.description, image: p.image })) });
   } catch (e) {
     return res.status(500).json({ error: "Failed to load projects" });
   }
@@ -17,8 +17,8 @@ export const createProject: RequestHandler = async (req: AuthRequest, res) => {
     const userId = req.userId!;
     const { title, description, image } = req.body || {};
     if (!title || !description) return res.status(400).json({ error: "title and description required" });
-    const project = await Project.create({ user: userId, title, description, image });
-    return res.status(201).json({ project });
+    const project = await db.createProject(userId, { title, description, image });
+    return res.status(201).json({ project: { _id: project.id, title: project.title, description: project.description, image: project.image } });
   } catch (e) {
     return res.status(500).json({ error: "Failed to create project" });
   }
@@ -29,13 +29,9 @@ export const updateProject: RequestHandler = async (req: AuthRequest, res) => {
     const userId = req.userId!;
     const { id } = req.params;
     const { title, description, image } = req.body || {};
-    const project = await Project.findOne({ _id: id, user: userId });
+    const project = await db.updateProjectForUser(id, userId, { title, description, image });
     if (!project) return res.status(404).json({ error: "Not found" });
-    if (title !== undefined) project.title = title;
-    if (description !== undefined) project.description = description;
-    if (image !== undefined) project.image = image;
-    await project.save();
-    return res.json({ project });
+    return res.json({ project: { _id: project.id, title: project.title, description: project.description, image: project.image } });
   } catch (e) {
     return res.status(500).json({ error: "Failed to update project" });
   }
@@ -45,8 +41,8 @@ export const deleteProject: RequestHandler = async (req: AuthRequest, res) => {
   try {
     const userId = req.userId!;
     const { id } = req.params;
-    const project = await Project.findOneAndDelete({ _id: id, user: userId });
-    if (!project) return res.status(404).json({ error: "Not found" });
+    const deleted = await db.deleteProjectForUser(id, userId);
+    if (!deleted) return res.status(404).json({ error: "Not found" });
     return res.json({ success: true });
   } catch (e) {
     return res.status(500).json({ error: "Failed to delete project" });
