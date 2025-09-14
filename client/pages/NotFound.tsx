@@ -15,7 +15,9 @@ const NotFound = () => {
     <div className="container py-24 text-center">
       <h1 className="text-6xl font-extrabold">404</h1>
       <p className="text-xl text-muted-foreground mt-2">Страница не найдена</p>
-      <Link to="/" className="inline-block mt-6 underline">На главную</Link>
+      <Link to="/" className="inline-block mt-6 underline">
+        На главную
+      </Link>
     </div>
   );
 };

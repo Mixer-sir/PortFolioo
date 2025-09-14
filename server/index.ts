@@ -4,7 +4,12 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { register, login } from "./routes/auth";
 import { requireAuth } from "./middleware/auth";
-import { listProjects, createProject, updateProject, deleteProject } from "./routes/projects";
+import {
+  listProjects,
+  createProject,
+  updateProject,
+  deleteProject,
+} from "./routes/projects";
 import { getUserPortfolio } from "./routes/public";
 
 export function createServer() {

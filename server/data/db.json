@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "id": "ccb7d74c-5656-43e7-a781-1ac4893d5003",
+      "email": "rmT13089@auca.kg",
+      "username": "MishaRo",
+      "passwordHash": "$2a$10$ZbY/48WiL3dR92tjXqBewOtXKL2wnkf0bVAGWzNEmBGyiZY0IdU3q",
+      "createdAt": "2025-09-14T16:55:06.757Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "d2e332e8-0f04-4413-bffa-37615a128dcd",
+      "userId": "ccb7d74c-5656-43e7-a781-1ac4893d5003",
+      "title": "проект",
+      "description": "Какое то описание",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3dlJN6Pct9s9xNTqNTvyNBK8IB50YypyDLw&s",
+      "createdAt": "2025-09-14T16:56:22.957Z",
+      "updatedAt": "2025-09-14T16:56:22.957Z"
+    }
+  ]
+}

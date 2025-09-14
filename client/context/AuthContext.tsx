@@ -1,7 +1,20 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-interface User { id: string; email: string; username: string }
-interface AuthState { user: User | null; token: string | null }
+interface User {
+  id: string;
+  email: string;
+  username: string;
+}
+interface AuthState {
+  user: User | null;
+  token: string | null;
+}
 interface AuthContextValue extends AuthState {
   login: (token: string, user: User) => void;
   logout: () => void;
@@ -9,7 +22,9 @@ interface AuthContextValue extends AuthState {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [state, setState] = useState<AuthState>({ user: null, token: null });
 
   useEffect(() => {

@@ -61,18 +61,37 @@ export const db = {
   // Users
   async findUserByEmail(email: string) {
     const data = await readDb();
-    return data.users.find((u) => u.email.toLowerCase() === email.toLowerCase()) || null;
+    return (
+      data.users.find((u) => u.email.toLowerCase() === email.toLowerCase()) ||
+      null
+    );
   },
   async findUserByUsername(username: string) {
     const data = await readDb();
-    return data.users.find((u) => u.username.toLowerCase() === username.toLowerCase()) || null;
+    return (
+      data.users.find(
+        (u) => u.username.toLowerCase() === username.toLowerCase(),
+      ) || null
+    );
   },
-  async createUser(params: { email: string; username: string; passwordHash: string }) {
+  async createUser(params: {
+    email: string;
+    username: string;
+    passwordHash: string;
+  }) {
     const data = await readDb();
-    if (data.users.some((u) => u.email.toLowerCase() === params.email.toLowerCase())) {
+    if (
+      data.users.some(
+        (u) => u.email.toLowerCase() === params.email.toLowerCase(),
+      )
+    ) {
       throw new Error("email_taken");
     }
-    if (data.users.some((u) => u.username.toLowerCase() === params.username.toLowerCase())) {
+    if (
+      data.users.some(
+        (u) => u.username.toLowerCase() === params.username.toLowerCase(),
+      )
+    ) {
       throw new Error("username_taken");
     }
     const user: UserRecord = {
@@ -94,9 +113,14 @@ export const db = {
   // Projects
   async listProjectsByUser(userId: string) {
     const data = await readDb();
-    return data.projects.filter((p) => p.userId === userId).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    return data.projects
+      .filter((p) => p.userId === userId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   },
-  async createProject(userId: string, params: { title: string; description: string; image?: string }) {
+  async createProject(
+    userId: string,
+    params: { title: string; description: string; image?: string },
+  ) {
     const data = await readDb();
     const now = new Date().toISOString();
     const project: ProjectRecord = {
@@ -114,11 +138,19 @@ export const db = {
   },
   async findProjectByIdForUser(id: string, userId: string) {
     const data = await readDb();
-    return data.projects.find((p) => p.id === id && p.userId === userId) || null;
+    return (
+      data.projects.find((p) => p.id === id && p.userId === userId) || null
+    );
   },
-  async updateProjectForUser(id: string, userId: string, params: { title?: string; description?: string; image?: string }) {
+  async updateProjectForUser(
+    id: string,
+    userId: string,
+    params: { title?: string; description?: string; image?: string },
+  ) {
     const data = await readDb();
-    const idx = data.projects.findIndex((p) => p.id === id && p.userId === userId);
+    const idx = data.projects.findIndex(
+      (p) => p.id === id && p.userId === userId,
+    );
     if (idx === -1) return null;
     const current = data.projects[idx];
     const updated: ProjectRecord = {
@@ -133,7 +165,9 @@ export const db = {
   async deleteProjectForUser(id: string, userId: string) {
     const data = await readDb();
     const before = data.projects.length;
-    data.projects = data.projects.filter((p) => !(p.id === id && p.userId === userId));
+    data.projects = data.projects.filter(
+      (p) => !(p.id === id && p.userId === userId),
+    );
     const deleted = data.projects.length !== before;
     if (deleted) await writeDb(data);
     return deleted;

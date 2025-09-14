@@ -9,7 +9,12 @@ export const getUserPortfolio: RequestHandler = async (req, res) => {
     const projects = await db.listProjectsByUser(user.id);
     return res.json({
       user: { id: user.id, username: user.username },
-      projects: projects.map((p) => ({ _id: p.id, title: p.title, description: p.description, image: p.image })),
+      projects: projects.map((p) => ({
+        _id: p.id,
+        title: p.title,
+        description: p.description,
+        image: p.image,
+      })),
     });
   } catch (e) {
     return res.status(500).json({ error: "Failed to load portfolio" });
