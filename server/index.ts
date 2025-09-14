@@ -1,8 +1,6 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
 import { handleDemo } from "./routes/demo";
 import { register, login } from "./routes/auth";
 import { requireAuth } from "./middleware/auth";
@@ -17,25 +15,7 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Connect to MongoDB; if no URI, start a local in-memory MongoDB automatically
-  const uri = process.env.MONGODB_URI;
-  if (uri) {
-    mongoose
-      .connect(uri)
-      .then(() => console.log("MongoDB connected"))
-      .catch((err) => console.error("MongoDB connection error", err));
-  } else {
-    (async () => {
-      try {
-        const mem = await MongoMemoryServer.create();
-        const memUri = mem.getUri();
-        await mongoose.connect(memUri);
-        console.log("MongoMemoryServer started (local DB)");
-      } catch (err) {
-        console.error("Failed to start local MongoMemoryServer", err);
-      }
-    })();
-  }
+  // Using local file database (no external setup required)
 
   // Health
   app.get("/api/ping", (_req, res) => {
